@@ -1,0 +1,39 @@
+.game-select-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: var(--gameboy-green-dark);
+  color: var(--gameboy-green-lighter);
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+}
+
+.game-select-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  text-shadow: 4px 4px 0 var(--gameboy-green-light);
+}
+
+.game-select-button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 4px solid var(--gameboy-green-lighter);
+  background: var(--gameboy-green-light);
+  color: var(--gameboy-green-dark);
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.game-select-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--gameboy-green-dark);
+}
+
+.game-select-button:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+} 

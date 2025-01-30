@@ -11,10 +11,11 @@ interface GameObject {
 // Add interface for props
 interface BreakoutProps {
   name: string;
+  onBack: () => void;
 }
 
 // Update component definition to use props
-const Breakout: React.FC<BreakoutProps> = ({ name }) => {
+const Breakout: React.FC<BreakoutProps> = ({ name, onBack }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gameStarted, setGameStarted] = useState(false);
   
@@ -183,6 +184,7 @@ const Breakout: React.FC<BreakoutProps> = ({ name }) => {
           Use ← → arrows to move
         </div>
       )}
+      <button className="back-button" onClick={onBack}>Back to Menu</button>
     </div>
   );
 };

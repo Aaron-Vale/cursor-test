@@ -134,4 +134,13 @@ body {
 .chrome-input::after {
   content: '_';
   animation: blink 1s step-end infinite;
+}
+
+.coming-soon {
+  font-size: 24px;
+  color: var(--gameboy-green-lighter);
+  text-align: center;
+  margin-top: 20px;
+  text-transform: uppercase;
+  text-shadow: 4px 4px 0 var(--gameboy-green-light);
 } 
