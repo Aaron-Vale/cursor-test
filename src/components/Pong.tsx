@@ -10,6 +10,8 @@ const Pong: React.FC<PongProps> = ({ onBack, name }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [playerScore, setPlayerScore] = useState(0);
   const [computerScore, setComputerScore] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
+  const [winner, setWinner] = useState<string | null>(null);
 
   const paddleWidth = 10;
   const paddleHeight = 100;
@@ -48,6 +50,8 @@ const Pong: React.FC<PongProps> = ({ onBack, name }) => {
     window.addEventListener('wheel', handleWheel);
 
     const gameLoop = () => {
+      if (gameOver) return;
+
       // Clear canvas
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
@@ -74,20 +78,51 @@ const Pong: React.FC<PongProps> = ({ onBack, name }) => {
         if (newY <= 0 || newY >= canvasHeight) newDy = -newDy;
 
         // Paddle collision
-        if (
-          (newX <= playerPaddle.x + paddleWidth && newY >= playerPaddle.y && newY <= playerPaddle.y + paddleHeight) ||
-          (newX >= computerPaddle.x - paddleWidth && newY >= computerPaddle.y && newY <= computerPaddle.y + paddleHeight)
-        ) {
-          newDx = -newDx;
-        }
+        const checkPaddleCollision = (paddle: { x: number; y: number }, isPlayer: boolean) => {
+          const paddleX = isPlayer ? paddle.x + paddleWidth : paddle.x;
+          const ballNearPaddle = isPlayer ? newX <= paddleX : newX >= paddleX - ballSize;
+
+          if (
+            ballNearPaddle &&
+            newY >= paddle.y &&
+            newY <= paddle.y + paddleHeight
+          ) {
+            newDx = -newDx;
+
+            // Calculate hit position on paddle
+            const hitPosition = (newY - paddle.y) / paddleHeight;
+
+            // Adjust speed based on hit position
+            if (hitPosition < 0.2 || hitPosition > 0.8) {
+              // Edge hit
+              newDx *= 1.1;
+              newDy *= 1.1;
+            } else if (hitPosition > 0.4 && hitPosition < 0.6) {
+              // Center hit
+              newDx *= 0.9;
+              newDy *= 0.9;
+            }
+          }
+        };
+
+        checkPaddleCollision(playerPaddle, true);
+        checkPaddleCollision(computerPaddle, false);
 
         // Score update
         if (newX < 0) {
           setComputerScore(prev => prev + 1);
+          if (computerScore + 1 >= 7) {
+            setGameOver(true);
+            setWinner('Computer');
+          }
           return { x: canvasWidth / 2, y: canvasHeight / 2, dx: 4, dy: 4 };
         }
         if (newX > canvasWidth) {
           setPlayerScore(prev => prev + 1);
+          if (playerScore + 1 >= 7) {
+            setGameOver(true);
+            setWinner(name);
+          }
           return { x: canvasWidth / 2, y: canvasHeight / 2, dx: -4, dy: 4 };
         }
 
@@ -97,7 +132,7 @@ const Pong: React.FC<PongProps> = ({ onBack, name }) => {
       // Computer AI
       setComputerPaddle(prev => {
         const targetY = ball.y - paddleHeight / 2;
-        const newY = prev.y + (targetY - prev.y) * 0.085; // Reduced skill factor
+        const newY = prev.y + (targetY - prev.y) * 0.088; // Reduced skill factor
         return { ...prev, y: Math.max(0, Math.min(canvasHeight - paddleHeight, newY)) };
       });
     };
@@ -109,7 +144,15 @@ const Pong: React.FC<PongProps> = ({ onBack, name }) => {
       window.removeEventListener('wheel', handleWheel);
       clearInterval(animationId);
     };
-  }, [playerPaddle, computerPaddle, ball]);
+  }, [playerPaddle, computerPaddle, ball, gameOver, playerScore, computerScore, name]);
+
+  const resetGame = () => {
+    setPlayerScore(0);
+    setComputerScore(0);
+    setGameOver(false);
+    setWinner(null);
+    setBall({ x: canvasWidth / 2, y: canvasHeight / 2, dx: 4, dy: 4 });
+  };
 
   return (
     <div className="pong-container">
@@ -117,6 +160,12 @@ const Pong: React.FC<PongProps> = ({ onBack, name }) => {
       <div className="scoreboard">
         {name}: {playerScore} - Computer: {computerScore}
       </div>
+      {gameOver && (
+        <div className="game-over">
+          <div className="winner-message">{winner} Wins!</div>
+          <button className="reset-button" onClick={resetGame}>Play Again</button>
+        </div>
+      )}
       <button className="back-button" onClick={onBack}>Back to Menu</button>
     </div>
   );

@@ -30,6 +30,41 @@
   text-shadow: 4px 4px 0 var(--gameboy-green-light);
 }
 
+.game-over {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--gameboy-green-lighter);
+  font-size: 32px;
+  animation: pixelate 1s steps(5) infinite alternate;
+}
+
+.winner-message {
+  margin-bottom: 20px;
+}
+
+.reset-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 4px solid var(--gameboy-green-lighter);
+  background: var(--gameboy-green-light);
+  color: var(--gameboy-green-dark);
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.reset-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--gameboy-green-dark);
+}
+
+.reset-button:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
 .back-button {
   padding: 10px 20px;
   font-size: 16px;
@@ -48,4 +83,9 @@
 .back-button:active {
   transform: translate(2px, 2px);
   box-shadow: none;
+}
+
+@keyframes pixelate {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  100% { transform: translate(-50%, -50%) scale(1.1); }
 } 
