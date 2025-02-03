@@ -8,9 +8,10 @@
   --gameboy-border: #8b8b8b;
 }
 
-body {
+body, html {
   margin: 0;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden; /* Prevent scrolling */
   background: var(--gameboy-green-dark);
   font-family: 'Press Start 2P', cursive;
   image-rendering: pixelated;

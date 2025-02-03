@@ -15,6 +15,9 @@ const GameSelect: React.FC<GameSelectProps> = ({ onSelectGame }) => {
       <button className="game-select-button" onClick={() => onSelectGame('pong')}>
         Pong
       </button>
+      <button className="game-select-button" onClick={() => onSelectGame('tetris')}>
+        Tetris
+      </button>
     </div>
   );
 };

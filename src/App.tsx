@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import Breakout from './components/Breakout';
 import Pong from './components/Pong';
+import Tetris from './components/Tetris';
 import GameSelect from './components/GameSelect';
 
 function App() {
@@ -48,8 +49,10 @@ function App() {
         <GameSelect onSelectGame={handleGameSelect} />
       ) : selectedGame === 'breakout' ? (
         <Breakout name={name} onBack={handleBackToMenu} />
-      ) : (
+      ) : selectedGame === 'pong' ? (
         <Pong name={name} onBack={handleBackToMenu} />
+      ) : (
+        <Tetris onBack={handleBackToMenu} />
       )}
     </div>
   );

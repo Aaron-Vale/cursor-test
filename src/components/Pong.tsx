@@ -132,7 +132,9 @@ const Pong: React.FC<PongProps> = ({ onBack, name }) => {
       // Computer AI
       setComputerPaddle(prev => {
         const targetY = ball.y - paddleHeight / 2;
-        const newY = prev.y + (targetY - prev.y) * 0.088; // Reduced skill factor
+        const randomFactor = Math.random() * 0.2 + 0.9; // Random speed factor between 0.9 and 1.1
+        const edgeTarget = Math.random() < 0.3 ? ball.y + ballSize : ball.y - ballSize; // 30% chance to aim for the edge
+        const newY = prev.y + ((Math.random() < 0.5 ? targetY : edgeTarget) - prev.y) * 0.088 * randomFactor;
         return { ...prev, y: Math.max(0, Math.min(canvasHeight - paddleHeight, newY)) };
       });
     };
